@@ -71,4 +71,12 @@ router.get('/',(req,res)=>{
     });
 });
 
+router.delete('/delete',(req,res)=>{
+    if (!req.cookies.token) return res.status(401).send("not valid");
+    const query = {"_id":req.body.id}
+    Workout.remove(query,(err)=>{
+        if (err) throw (err)
+        res.status(200).send(query);
+    });
+});
 module.exports = router;
