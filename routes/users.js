@@ -11,7 +11,7 @@ router.post('/login',passport.authenticate('local'),(req,res)=>{
     jwt.sign({user:req.user},'secretKey',(err,token)=>{
         res.cookie('token', token, { httpOnly: true })
         res.cookie('user',req.user, { httpOnly: true })
-        res.send()
+        res.status(200).json(req.user);
     });
 });
 
@@ -33,25 +33,18 @@ router.post('/register',
     // validate user input
     body('email').isEmail(),
     // body('username').isAlphanumeric(),
-    body('Name').isLength({ min: 1}),
+    body('name').isLength({ min: 1}),
     body('password').isLength({ min: 5}),
-    body('password2').custom((value,{req})=>{
-        if(value!==req.body.password){
-            throw new Error('Passwords do not match');
-        }
-        return true;
-    }),
+    // body('password2').custom((value,{req})=>{
+    //     if(value!==req.body.password){
+    //         throw new Error('Passwords do not match');
+    //     }
+    //     return true;
+    // }),
     body('email').custom(value=>{
         return User.findOne({email:value}).then(user => {
             if (user) {
               return Promise.reject('E-mail already in use');
-            }
-        });
-    }),
-    body('username').custom(value=>{
-        return User.findOne({username:value}).then(user => {
-            if (user) {
-              return Promise.reject('Username already in use');
             }
         });
     }),

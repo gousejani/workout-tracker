@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const workoutSchema = mongoose.Schema({
     date:{type:Date,default:Date.now},
+    searchDate:{type:Date,required:true},
     email:{type:String,required:true},
     activity:{type:String,required:true},
     category:{type:String},
