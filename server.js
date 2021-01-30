@@ -6,7 +6,8 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const app = express();
 const cors = require('cors');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const path = require('path');
 
 app.use(express.json());
 
@@ -51,6 +52,12 @@ const workouts = require('./routes/workouts');
 app.use('/api/workouts', workouts);
 
 
+if(process.env.NODE_ENV==='production'){
+  app.use(express.static('client/build'));
+  app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname,'client','build','index.html'));
+  });
+}
 // Listen
 
 const PORT = process.env.PORT||5000;
